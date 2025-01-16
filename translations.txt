@@ -105,9 +105,9 @@ directories=目录
 directory=目录
 Disabled=已禁用
 disabled=已禁用
-Disk=磁盘
-disk=磁盘
-Disk-Clear=磁盘擦除
+Disk=硬盘
+disk=硬盘
+Disk-Clear=硬盘擦除
 DNS issue, unable to resolve mothershipunraidnet=DNS 问题，无法连接到 mothership.unraid.net
 Do you want to update to the new version=是否要更新到新版本
 Docker=Docker
@@ -465,22 +465,22 @@ Your browser has JavaScript disabled=您的浏览器禁用了 JavaScript
 ; Favorites
 
 ; Dynamix.system.button plugin
-Array busy=磁盘阵列忙碌
+Array busy=硬盘阵列忙碌
 Buttons=按钮
 Parity operation or mover is running=奇偶校验操作或迁移程序(mover)正在运行
 preparing for reboot=准备重启
 preparing for shutdown=准备关机
 Sleep=睡眠
-Start Array=启动磁盘阵列
-starting the array=正在启动磁盘阵列
-Stop Array=停止磁盘阵列
-stopping the array=正在停止磁盘阵列
+Start Array=启动硬盘阵列
+starting the array=正在启动硬盘阵列
+Stop Array=停止硬盘阵列
+stopping the array=正在停止硬盘阵列
 System in sleep mode=系统处于睡眠模式
 This will put the system to sleep=这将使系统进入睡眠状态
 This will reboot the system=这将重启系统
 This will shutdown the system=这将关闭系统
-This will start the array=这将启动磁盘阵列
-This will stop the array=这将停止磁盘阵列
+This will start the array=这将启动硬盘阵列
+This will stop the array=这将停止硬盘阵列
 
 ; Dynamix File Manager - 2023-04-11
 %s year ago=%s 年前
@@ -545,7 +545,7 @@ New owner=新所有者
 New permission=新权限
 No jobs scheduled=没有计划任务
 No results found=未找到结果
-Not allowed to mix disk and user shares=不允许混合使用磁盘和用户共享
+Not allowed to mix disk and user shares=不允许混合使用硬盘和用户共享
 Objects to change=要更改的对象
 Objects to copy=要拷贝的对象
 Objects to delete=要删除的对象
