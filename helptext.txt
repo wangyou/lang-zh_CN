@@ -267,19 +267,30 @@ UnRAID 阵列由一个或两个奇偶校验磁盘和多个数据磁盘组成。�
 在选中*修复已损坏的块*的情况下，如果有正确副本可用，*btrfs scrub* 将修复损坏的块。
 :end
 
+:info_zfs_scrub_help:
+**Scrub**运行 *zfs scrub* 程序，该程序将从所有设备读取所有数据和元数据块
+并验证校验和。
+
+单击**升级池** 按钮升级 ZFS 池以启用最新的 ZFS 功能。
+:end
+
 :info_scrub_cancel_help:
 **取消**将取消进行中的清理操作。
 :end
 
 :info_btrfs_check_help:
-**检查**将运行 *btrfs check* 程序以检查设备上的文件系统完整性。
+**检查**将运行 *btrfs check* 程序来检查设备上的文件系统完整性。
 
-*选项*字段使用 *--readonly* 初始化，该字段指定仅检查。如果需要修复，应运行
+*选项*字段使用 *--readonly* 初始化，该字段仅检查。如果需要修复，应该运行
 第二次检查，将*选项*设置为 *--repair*；这将允许 *btrfs check* 修复文件系统。
 
-开始检查后，应刷新以监控进度和状态。根据文件系统的大小
+警告：除非您是开发人员或有经验的用户建议您这样做，否则**请勿使用** *--repair*，
+并且只有在接受没有 fsck 可以成功修复所有类型的文件系统损坏之后才可以使用。
+例如，其他一些软件或硬件错误可能会对卷造成致命损坏。
+
+开始检查后，您应该刷新监控进度和状态。根据文件系统的大小
 以及可能存在的错误，此操作可能需要**很长时间**才能完成（以小时计）。
-窗口中没有打印太多信息，但可以在主页上观察设备读/写计数器的增加
+窗口中没有显示太多信息，但可以在主页上观察设备 读/写 计数器的增加
 来验证操作是否正在运行。
 :end
 
@@ -418,6 +429,10 @@ UnRAID 阵列由一个或两个奇偶校验磁盘和多个数据磁盘组成。�
 
 单击**应用**按钮以提交当前编辑。单击**重置**
 以撤消所做的任何更改（保存之前）。单击**完成**以退出此页面。
+:end
+
+:info_share_assignment_help:
+选定的池可用于用户共享。
 :end
 
 :info_free_space_help:
@@ -615,6 +630,32 @@ UnRAID 阵列由一个或两个奇偶校验磁盘和多个数据磁盘组成。�
 只要共享包含数据就*不能*将其删除。请注意，某些数据可以隐藏。另请参见 [SMB 设置](/Settings/SMB) -> 隐藏 '点' 文件。
 :end
 
+:share_edit_exclusive_access_help:
+设置为“是”表示已为 /mnt/user 树中的共享设置了直接指向池的符号链接。
+
+参照[全局共享设置](设置/共享设置)->允许独占共享。
+:end
+
+:share_edit_primary_storage_help:
+**主存储** 是创建 *新文件和文件夹* 的地方。如果
+主存储低于最小可用空间设置，则新文件
+和文件夹将在 **辅助存储** 中创建（如果已配置）。
+
+**重要提示**：对于*独占访问*共享，最小可用空间
+设置将被忽略。
+:end
+
+:share_edit_secondary_storage_help:
+如果主存储上没有空间，则**辅助存储**是创建新文件和
+目录的地方。当主存储和辅助存储都配置好后，
+“移动器”将在它们之间传输文件。
+:end
+
+:share_edit_mover_action_help:
+当主存储和辅助存储均已配置时，这定义了主存储和
+辅助存储之间的文件传输方向。
+:end
+
 :smb_security_help:
 *读取设置自*用于使用现有共享的设置来预设当前所选共享的 SMB 安全设置。
 
@@ -664,7 +705,14 @@ UnRAID 阵列由一个或两个奇偶校验磁盘和多个数据磁盘组成。�
 
 **专用** 完全没有访客访问权限，由您选择哪些用户具有读/写
 或只读访问权限。
+
+Windows服务器签名:
+
+如果您无法使用 Windows 11 版本 24H2 或更新版本浏览 SMB 共享，则需要进行一些更改以适应名为“服务器签名”的新功能。Unraid 中启用了服务器签名，您需要进行更改才能访问公共共享。
+您可以<u><a href='https://techcommunity.microsoft.com/t5/storage-at-microsoft/accessing-a-third-party-nas-with-smb-in-windows-11-24h2-may-fail/ba-p/4154300', target='_blank'>在 Windows 中禁用它</a></u>，或者要在启用服务器签名的情况下使用 Unraid，最简单的方法是在 Unraid 中创建一个用户（设置密码），其名称与您正在使用的 Windows 帐户相同，然后 Windows 会要求您提供凭据。
+如果您使用的是 Microsoft 帐户，最好只在 Unraid 中创建一个具有简单用户名的用户并设置密码，然后在 Windows 中转到控制面板->凭据管理器-> Windows 凭据->添加 Windows 凭据并添加正确的 Unraid 服务器名称和凭据。
 :end
+
 
 :smb_secure_access_help:
 *读取设置自*用于使用现有共享的设置来预设当前所选共享的 SMB 用户访问设置。
@@ -694,6 +742,15 @@ UnRAID 阵列由一个或两个奇偶校验磁盘和多个数据磁盘组成。�
 *写入设置到*用于将当前所选共享的 NFS 安全设置复制到一个或多个其他现有共享。
 
 选择所需的目的地，然后按**写入**将 NFS 安全设置复制到所选共享。
+:end
+
+:nfs_security_rules_help:
+将每个 IP 地址的规则放在单独的行上，并另起一行结束规则。
+您不能以 IP1、IP2(...) 格式输入规则。Unraid 不会以该格式格式化导出文件。
+
+每个 NFS 规则的默认规则是 - async 和 no_subtree_check。
+
+**注意：**使用的公共规则是“* '*(rw,sec=sys,insecure,anongid=100,anonuid=99,no_root_squash)'.
 :end
 
 :user_add_username_help:
@@ -911,6 +968,18 @@ MBR 样式分区表的*传统*设置。
 设为 0 值将禁用危险阈值（包括通知）。
 :end
 
+:ssd_default_warning_temperature_help:
+*SSD 温度警告* 设置所有 SSD 设备温度的默认警告阈值。超过此阈值将发出警告通知。
+
+值为 0 将禁用温度警告（包括通知）。
+:end
+
+:ssd_default_critical_temperature_help:
+*磁盘临界温度* 设置所有 SSD 设备温度的默认临界阈值。超过此阈值将发出警告通知。
+
+值为 0 将禁用温度警告（包括通知）。
+:end
+
 :disk_default_smart_notification_help:
 当属性的 RAW 值增加到或 NORMALIZED 值减少到制造商的预定义阈值时，将生成 SMART通知。
 
@@ -953,6 +1022,27 @@ MBR 样式分区表的*传统*设置。
 完成首次启动之后，Docker 总是会在阵列启动后自动启动。
 :end
 
+:docker_readmore_help:
+某些拥有大量 Docker 容器的系统在使用 Docker 主页时可能会遇到延迟。
+
+将其设置为“否”可以通过禁用 readmore-js 来帮助加快一般页面的加载速度。
+端口和卷映射部分没有使用箭头来表示有更多数据，而是直接显示了所有数据。
+:end
+
+:docker_timeout_help:
+在强制停止容器之前允许容器正常停止的时间（以秒为单位）
+:end
+
+:docker_pid_limit_help:
+设置进程限制以限制 Docker 可以使用的进程数量。默认值为 2048。设置为零可获得无限制的进程数量（不推荐）。
+:end
+
+:docker_vdisk_type_help:
+选择保存Docker持久状态的位置。
+
+这可以是一个具有特定大小的镜像文件或一个专用文件夹。
+:end
+
 :docker_vdisk_size_help:
 如果系统需要创建新的 docker 镜像文件，可以使用此选项指定默认大小 (GB)。
 
@@ -965,6 +1055,21 @@ MBR 样式分区表的*传统*设置。
 镜像文件名必须以 .img 为扩展名，否则系统将无法接受该输入并将其标红。
 
 建议将该镜像文件创建在阵列之外，例如在缓存池中创建。为获得最佳性能，首选 SSD 设备。
+:end
+
+:docker_vdisk_directory_help:
+必须为Docker指定一个文件夹，Docker服务首次启动时系统会自动创建该文件夹。
+
+建议在与缓存池（设置：cache=Only）相连的共享位置下创建此文件夹。为了获得最佳性能，建议使用SSD设备。
+:end
+
+:docker_storage_driver_help:
+overlay2（默认）：将使用 overlay2 作为 Docker 的存储驱动，而不考虑底层文件系统是什么。
+
+native：将使用您底层文件系统的原生存储驱动（XFS 使用 overlay2 | ZFS 使用 zfs | BTRFS 使用 btrfs）。
+
+注意：无法从现有的 Docker 安装中更改存储类型，您必须先删除 Docker 目录，更改存储类型，然后重新安装您的容器。
+建议在更改存储类型之前，对您的 Docker 容器进行截图保存。在删除 Docker 目录并更改存储类型之后，请通过点击 Docker 页面上的“添加容器（Add Container）”按钮来重新安装容器，并从下拉菜单中逐一选择以使用您之前的设置重新安装它们。
 :end
 
 :docker_appdata_location_help:
@@ -993,6 +1098,17 @@ MBR 样式分区表的*传统*设置。
 
 :docker_authoring_mode_help:
 如果设为**是**，在创建/编辑容器时，界面将呈现一些与模板创作相关的额外字段。
+:end
+
+:docker_custom_network_type_help:
+当不需要连接到物理网络时，‌ipvlan‌ 类型是最佳选择。
+请阅读‌ <u><a style="color:blue" href='https://docs.docker.com/network/ipvlan/', target='_blank'>此文档</a></u> 以了解如何实现ipvlan网络。<br>
+
+‌macvlan‌ 网络类型允许直接连接到物理网络。
+请阅读‌ <u><a style="color:blue" href='https://docs.docker.com/network/macvlan/', target='_blank'>此文档</a></u> ‌以了解如何实现macvlan网络。<br>
+
+**注意**：Docker 使用自己的 dhcp 服务，即 **DHCP 池** 设置。
+当您使用多个 Unraid 服务器时，每个服务器必须配置不同的 Docker **DHCP 池** 范围。
 :end
 
 :docker_custom_network_access_help:
@@ -1037,6 +1153,10 @@ MBR 样式分区表的*传统*设置。
 
 :docker_vdisk_location_active_help:
 这是 Docker 镜像的位置。
+:end
+
+:docker_storage_driver_active_help:
+‌这是 Docker 的存储驱动程序。
 :end
 
 :docker_appdata_location_active_help:
